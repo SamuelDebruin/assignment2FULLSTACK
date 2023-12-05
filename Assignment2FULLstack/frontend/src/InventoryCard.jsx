@@ -10,15 +10,7 @@ export default function InventoryCard({ list, onClick }) {
           <p>
             <strong>{l.price}</strong>
           </p>
-          {/* <div className="counter-container">
-            <div className="counter-button" onClick={subtractCounter}>
-              <span>-</span>
-            </div>
-            <span>{counter}</span>
-            <div className="counter-button" onClick={addCounter}>
-              <span>+</span>
-            </div>
-          </div> */}
+
           <button onClick={() => onClick(l)}>Add to cart</button>
         </div>
       ))}

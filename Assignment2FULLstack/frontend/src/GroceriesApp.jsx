@@ -1,6 +1,6 @@
 import InventoryCard from "./InventoryCard";
 import CartList from "./CartList";
-//import { products } from "./data/products";
+// import { products } from "./data/products";
 import { useState, useEffect } from "react";
 import axios from "axios"
 import InventoryForm from "./InventoryForm.jsx";
