@@ -1,7 +1,11 @@
-export default function InventoryForm(formData, handleOnChange, handleOnSubmit) {
+export default function InventoryForm({
+    formData, 
+    handleOnChange, 
+    handleOnSubmit
+}) {
     return(
     <div>
-        <form action="" onSubmit={() => handleOnSubmit(formData)}>
+        <form action="" onSubmit={handleOnSubmit}>
             <div>
                 <label htmlFor="productName">product Name</label>
                 <input 

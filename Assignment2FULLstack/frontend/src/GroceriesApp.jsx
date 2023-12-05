@@ -48,8 +48,16 @@ export default function GroceriesApp() {
   }
 
   const handleOnSubmit = (evt) => {
-    evt.perventDefualt();
+    evt.perventDefault();
     handlePostProduct(formData)
+    setFormData({
+      id: "",
+      productName: "",
+      brand: "",
+      quantity: "",
+      image: "",
+      price: "",
+    })
   }
 
   //adding to cart
