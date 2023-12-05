@@ -47,3 +47,25 @@ server.post("/addProduct", async(request, response) => {
     ? response.send("Product is added to inventory")
     : response.send("Failed to add!");
 });
+
+server.delete("/product/:id", async (request, response) =>{
+    const {id} = request.params
+    const deleteProduct = await Product.deleteOne({
+        _id: new mongoose.Types.ObjectId(id),
+    })
+    deleteProduct 
+    ? response.send(`${id} product has been deleted`) 
+    : response.send("Failed to delete")
+})
+
+server.patch("/product/:id", async(request,response) => {
+    const {id} = request.params;
+    const product = request.body
+    const patchProduct = await Product.updateOne(
+        { _id: new mongoose.Types.ObjectId(id) }, 
+        {$set: product}
+    )
+    patchProduct 
+    ? response.send(`${product.productName} has been edited`)
+    : response.send("Failed to edit")
+})

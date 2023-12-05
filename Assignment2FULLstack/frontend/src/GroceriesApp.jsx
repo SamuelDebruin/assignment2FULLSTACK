@@ -17,6 +17,7 @@ export default function GroceriesApp() {
     price: "",
   })
   const [responseData, setResponseData] = useState("")
+  const [toggleEdit, setToggleEdit] = useState(false)
 
   //useEffect
 useEffect(() => {
@@ -47,8 +48,8 @@ await axios
 }
 
 const handleOnSubmit = (evt) => {
-  evt.preventDefault();
-  handlePostProduct(formData);
+  evt.preventDefault;
+  toggleEdit ? handleProductEdit(formData) : handlePostProduct(formData)
   setFormData({
     id: "",
     productName: "",
@@ -57,8 +58,36 @@ const handleOnSubmit = (evt) => {
     image: "",
     price: "",
   })
-
 }
+
+const handleProductDelete = async(product) => {
+ const id = product._id;
+ axios
+ .delete(`http://localhost:3000/product/${id}`)
+ .then((response) => setResponseData(<p>{response.data}</p>))
+}
+
+const handleProductEdit = async(product) => {
+  const id = product._id
+  const editData = {
+    id: product.id,
+    productName: product.productName,
+    brand: product.brand,
+    quantity: product.quantity,
+    image: product.image,
+    price: product.price
+  }
+  await axios
+  .patch(`http://localhost:3000/product/${id}`, editData)
+  .then((response) => setResponseData(<p>{response.data}</p>))
+  .then(setToggleEdit(false))
+}
+
+const handleToggleEdit = (product) => {
+  setFormData(product);
+  setToggleEdit(true)
+}
+
 /////Adding to cart
   const handleAddToCart = (item) => {
     setCartList((prevList) => {
@@ -99,10 +128,16 @@ const handleOnChange = (evt) => {
         formData={formData} 
         handleOnChange={handleOnChange} 
         handleOnSubmit={handleOnSubmit}
+        toggleEdit={toggleEdit}
       />
       {responseData}
       <div className="GroceriesApp-Container">
-        <InventoryCard list={products} onClick={handleAddToCart} />
+        <InventoryCard 
+        list={products} 
+        onClick={handleAddToCart} 
+        handleProductDelete={handleProductDelete}
+        handleToggleEdit={handleToggleEdit}
+        />
         <CartList
           cartList={cartList}
           onClickEmpty={handleEmptyCart}
