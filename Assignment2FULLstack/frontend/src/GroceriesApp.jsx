@@ -7,60 +7,59 @@ import InventoryForm from "./InventoryForm.jsx";
 
 export default function GroceriesApp() {
   const [cartList, setCartList] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [formData, setFormData] = useState({
+  const [products, setProduct] = useState([]);
+  const [formData, setFormData] =useState({
     id: "",
     productName: "",
     brand: "",
     quantity: "",
     image: "",
     price: "",
-  });
-  const [responseData, setResponseData] = useState("");
+  })
+  const [responseData, setResponseData] = useState("")
 
   //useEffect
-  useEffect(() => {
-    handleGetProducts();
-  }, [responseData]);
+useEffect(() => {
+  handleGetProducts()
+}, [responseData]);
 
-  //HANDLERS
-  //Get products
-  const handleGetProducts = async() => {
+//HANDLERS
+//get Products
+const handleGetProducts = async() => {
+  await axios.get("http://localhost:3000/products").then((response) => {
+    setProduct(response.data);
+  });
+}
 
-    await axios.get("http://localhost:3000/products").then((response) => {
-      setProducts(response.data);
-    });
-  };
-
-  //Post product
-  const handlePostProduct = async (product) => {
-    const postProduct = {
-      id: product.id,
-      productName: product.productName,
-      brand: product.brand,
-      quantity: product.quantity,
-      image: product.image,
-      price: product.price
-    }
-    await axios
-    .post("http://localhost:3000/addProduct", postProduct)
-    .then((response) => setResponseData(<p>{response.data}</p>));
+//////Post product
+const handlePostProduct = async(product) => {
+  const postProduct = {
+    id: product.id,
+    productName: product.productName,
+    brand: product.brand,
+    quantity: product.quantity,
+    image: product.image,
+    price: product.price
   }
+await axios
+.post("http://localhost:3000/addProduct", postProduct)
+.then(response => setResponseData(<p>{response.data}</p>))
+}
 
-  const handleOnSubmit = (evt) => {
-    evt.perventDefault();
-    handlePostProduct(formData)
-    setFormData({
-      id: "",
-      productName: "",
-      brand: "",
-      quantity: "",
-      image: "",
-      price: "",
-    })
-  }
+const handleOnSubmit = (evt) => {
+  evt.preventDefault();
+  handlePostProduct(formData);
+  setFormData({
+    id: "",
+    productName: "",
+    brand: "",
+    quantity: "",
+    image: "",
+    price: "",
+  })
 
-  //adding to cart
+}
+/////Adding to cart
   const handleAddToCart = (item) => {
     setCartList((prevList) => {
       console.log(cartList);
@@ -68,26 +67,25 @@ export default function GroceriesApp() {
     });
   };
 
+///onChange Handler
+const handleOnChange = (evt) => {
+  const fieldName = evt.target.name
+  const fieldValue = evt.target.value
+  setFormData((prevData) => {
+    return{
+    ...prevData,
+    id: crypto.randomUUID(),
+    [fieldName]: fieldValue,
+    };
+  });
+};
 
-  //onChange Handler
-  const handleOnChange = (evt) => {
-    const fieldName = evt.target.name;
-    const fieldValue = evt.target.value;
-    setFormData((prevData) => {
-      return {
-        ...prevData,
-        id: crypto.randomUUID(),
-        [fieldName]: fieldValue,
-      };
-    });
-  };
-
-  //Emptying cart
+  //empty cart
   const handleEmptyCart = () => {
     setCartList([]);
   };
 
-  //Remove Item from cart
+  //removing item from cart
   const handleRemoveItem = (id) => {
     setCartList((prevList) => {
       return prevList.filter((i) => i.id !== id);
@@ -98,9 +96,9 @@ export default function GroceriesApp() {
     <>
       <h1>Groceries App</h1>
       <InventoryForm 
-      formData={formData} 
-      handleOnChange={handleOnChange} 
-      handleOnSubmit={handleOnSubmit}
+        formData={formData} 
+        handleOnChange={handleOnChange} 
+        handleOnSubmit={handleOnSubmit}
       />
       {responseData}
       <div className="GroceriesApp-Container">
@@ -114,3 +112,7 @@ export default function GroceriesApp() {
     </>
   );
 }
+
+
+
+

@@ -6,7 +6,7 @@ const cors = require("cors")
 const mongoose = require("mongoose")
 const Product = require("./models/product")
 const port = 3000;
-const db_uri = "mongodb+srv://sam:samuel@cluster0.csssvaw.mongodb.net/products?retryWrites=true&w=majority"
+const db_uri = "mongodb+srv://sam:samuel@cluster0.csssvaw.mongodb.net/?retryWrites=true&w=majority"
 
 //Middleware
 server.use(express.urlencoded({extended:false}))
@@ -32,20 +32,18 @@ server.get("/products", async (request, response) => {
     response.send(products);
 })
 
-
 server.post("/addProduct", async(request, response) => {
-    const product = request.body;
+    const product = request.body
     const postProduct = new Product({
         id: product.id,
+        productName: product.productName,
         brand: product.brand,
         quantity: product.quantity,
         image: product.image,
         price: product.price
     })
     const saveProduct = await postProduct.save()
-    saveProduct 
+    saveProduct
     ? response.send("Product is added to inventory")
-    : response.send("Failed to add");
-
-
-})
+    : response.send("Failed to add!");
+});
